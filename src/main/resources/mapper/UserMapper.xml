@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.easy.springboot.mapper.IUserMapper">
+
+
+    <insert id="add">
+        insert into users(name,password,email,phone,avatar)
+        values (#{name},#{password},#{email},#{phone},#{avatar})
+    </insert>
+
+    <select id="list" resultType="User">
+        select id,name,password,email,phone,avatar from users
+        <where>
+            <if test="name!=null and name!=''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="email!=null and email!=''">
+                and email like concat('%',#{email},'%')
+            </if>
+        </where>
+
+    </select>
+
+    <delete id="deleteById">
+        delete from users where id=#{id}
+    </delete>
+
+    <delete id="deleteAll">
+        delete from users
+        where id in
+        <foreach collection="array" open="(" close=")" item="id" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="selectById" resultType="User">
+        select id,name,password,email,phone,avatar from users
+        where id=#{id}
+    </select>
+
+    <update id="update" parameterType="User">
+        update users
+        <set>
+            <if test="name!=null and name!=''">
+                name=#{name},
+            </if>
+            <if test="password!=null">
+                password=#{password},
+            </if>
+            <if test="email!=null and email!=''">
+                email=#{email},
+            </if>
+            <if test="phone!=null and phone!=''">
+                phone=#{phone},
+            </if>
+            <if test="avatar!=null and avatar!=''">
+                avatar=#{avatar},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="login" resultType="User">
+        select id,name,password,email,phone,avatar from users
+        where name=#{name} and password=#{password}
+    </select>
+
+
+
+
+	
+</mapper>
+   
